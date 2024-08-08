@@ -13,5 +13,8 @@
   "dependencies": {
     "express": "^4.19.2",
     "phonebook_backend": "file:"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
   }
 }
