@@ -1,6 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
+const mongoose = require("mongoose");
 
 
 const app = express();
@@ -11,6 +12,20 @@ app.use(
 );
 app.use(cors());
 app.use(express.static("dist"));
+
+if(process.argv.length<3){
+  console.log("give password as argument");
+  process.exit(1);
+}
+
+const password = process.argv[2];
+console.log(password);
+const url =`mongodb+srv://fullstack:${password}@cluster0.aowtp.mongodb.net/phone?retryWrites=true&w=majority&appName=Cluster0`;
+
+mongoose.set("strictQuery", false);
+mongoose.connect(url).then(
+  console.log("connected to MongoDB")
+);
 
 let Persons = [
   {
@@ -101,7 +116,7 @@ app.get("/info", (req, res) => {
 });
 
 const PORT = process.env.PORT || 3001;
-
+/* mongodb+srv://<username>:<password>@cluster0.aowtp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0 */
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
