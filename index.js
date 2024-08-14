@@ -1,10 +1,10 @@
+require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
-require("dotenv").config;
 
-const datbase = require("./dataBase");
-
+const personDB = require("./dataBase");
+const mongoose = require("mongoose");
 
 const app = express();
 app.use(express.json());
@@ -14,7 +14,6 @@ app.use(
 );
 app.use(cors());
 app.use(express.static("dist"));
-
 
 let Persons = [
   {
@@ -48,7 +47,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/persons", (req, res) => {
-  res.json(Persons);
+  personDB.find({}).then((Persons) => res.json(Persons));
 });
 
 app.get("/api/persons/:id", (req, res) => {
@@ -86,13 +85,14 @@ app.post("/api/persons", (req, res) => {
     });
   }
 
-  const person = {
-    id: generateId(),
+  const person = new personDB({
     name: body.name,
     number: body.number,
-  };
-  Persons = Persons.concat(person);
-  res.json(person);
+  });
+  person.save().then((savedPerson) => {
+    res.json(savedPerson);
+    mongoose.connection.close();
+  });
 });
 
 app.get("/info", (req, res) => {
