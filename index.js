@@ -3,7 +3,7 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 
-const personDB = require("./dataBase");
+const personDB = require("./models/dataBase");
 
 const app = express();
 app.use(express.json());
