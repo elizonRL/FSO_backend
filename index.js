@@ -51,7 +51,7 @@ app.post("/api/persons", (req, res) => {
       error: "name or number missing",
     });
   }
-  if (
+ /*  if (
     Persons.find(
       (person) =>
         person.name.toLocaleLowerCase() === body.name.toLocaleLowerCase()
@@ -60,7 +60,7 @@ app.post("/api/persons", (req, res) => {
     return res.status(400).json({
       error: "name must be unique",
     });
-  }
+  } */
 
   const person = new personDB({
     name: body.name,
