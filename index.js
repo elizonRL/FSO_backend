@@ -51,16 +51,6 @@ app.post("/api/persons", (req, res) => {
       error: "name or number missing",
     });
   }
- /*  if (
-    Persons.find(
-      (person) =>
-        person.name.toLocaleLowerCase() === body.name.toLocaleLowerCase()
-    )
-  ) {
-    return res.status(400).json({
-      error: "name must be unique",
-    });
-  } */
 
   const person = new personDB({
     name: body.name,
@@ -69,6 +59,20 @@ app.post("/api/persons", (req, res) => {
   person.save().then((savedPerson) => {
     res.json(savedPerson);
   });
+});
+app.put("/api/persons/:id", (req, res, next) => {
+  const { name, number } = req.body;
+
+  personDB
+    .findByIdAndUpdate(
+      req.params.id,
+      { name, number },
+      { new: true, runValidators: true, context: "query" }
+    )
+    .then((updatedPerson) => {
+      res.json(updatedPerson);
+    })
+    .catch((error) => next(error));
 });
 
 app.get("/info", (req, res) => {
